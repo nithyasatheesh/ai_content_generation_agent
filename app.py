@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 
 from agents.orchestrator import ContentOrchestrator
 
@@ -12,7 +11,7 @@ st.set_page_config(
 st.title("🎥 AI Educational Video Generator")
 
 st.write(
-    "Generate AI educational videos using OpenAI"
+    "Generate AI educational content using OpenAI"
 )
 
 api_key = st.secrets["OPENAI_API_KEY"]
@@ -27,10 +26,10 @@ category = st.selectbox(
 
 topic = st.text_input(
     "Enter Topic",
-    placeholder="Example: Docker for Beginners",
+    placeholder="Example: Kubernetes for Beginners",
 )
 
-if st.button("Generate Video"):
+if st.button("Generate Content"):
 
     if not topic:
         st.warning("Please enter topic")
@@ -45,7 +44,7 @@ if st.button("Generate Video"):
             category,
         )
 
-    st.success("Video Generated")
+    st.success("Content Generated Successfully")
 
     st.subheader("Generated Script")
     st.write(result["script"])
@@ -53,10 +52,12 @@ if st.button("Generate Video"):
     st.subheader("Quiz")
     st.write(result["quiz"])
 
-    with open(result["video"], "rb") as video_file:
-        st.video(video_file.read())
+    st.subheader("Generated Narration")
+
+    st.audio(result["audio"])
 
     with open(result["ppt"], "rb") as ppt_file:
+
         st.download_button(
             label="Download PPT",
             data=ppt_file,
