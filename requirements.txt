@@ -1,9 +1,11 @@
 streamlit
 openai
-python-dotenv
 python-pptx
-moviepy
-Pillow
+moviepy==1.0.3
+imageio==2.31.1
+imageio-ffmpeg==0.4.9
 numpy
-imageio
-imageio-ffmpeg
+Pillow
+decorator==4.4.2
+proglog
+tqdm
