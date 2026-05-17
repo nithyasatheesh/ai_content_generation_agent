@@ -1,17 +1,21 @@
+import streamlit as st
 import os
 
-st.write(
-    "Generate AI educational videos for technical and soft skill topics"
+from agents.orchestrator import ContentOrchestrator
+
+
+st.set_page_config(
+    page_title="AI Video Generator",
+    layout="wide",
 )
 
+st.title("🎥 AI Educational Video Generator")
 
-api_key = os.getenv("OPENAI_API_KEY")
+st.write(
+    "Generate AI educational videos using OpenAI"
+)
 
-
-if not api_key:
-    st.error("OPENAI_API_KEY not found in .env")
-    st.stop()
-
+api_key = st.secrets["OPENAI_API_KEY"]
 
 category = st.selectbox(
     "Select Category",
@@ -21,32 +25,33 @@ category = st.selectbox(
     ],
 )
 
-
 topic = st.text_input(
     "Enter Topic",
-    placeholder="Example: Kubernetes for Beginners",
+    placeholder="Example: Docker for Beginners",
 )
 
-
 if st.button("Generate Video"):
+
     if not topic:
-        st.warning("Please enter a topic")
+        st.warning("Please enter topic")
         st.stop()
 
     orchestrator = ContentOrchestrator(api_key)
 
     with st.spinner("Generating content..."):
-        result = orchestrator.run(topic, category)
 
-    st.success("Content Generated Successfully")
+        result = orchestrator.run(
+            topic,
+            category,
+        )
+
+    st.success("Video Generated")
 
     st.subheader("Generated Script")
     st.write(result["script"])
 
     st.subheader("Quiz")
     st.write(result["quiz"])
-
-    st.subheader("Video")
 
     with open(result["video"], "rb") as video_file:
         st.video(video_file.read())
@@ -57,12 +62,4 @@ if st.button("Generate Video"):
             data=ppt_file,
             file_name="generated_slides.pptx",
             mime="application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        )
-
-    with open(result["audio"], "rb") as audio_file:
-        st.download_button(
-            label="Download Narration",
-            data=audio_file,
-            file_name="narration.mp3",
-            mime="audio/mp3",
         )
