@@ -1,0 +1,9 @@
+streamlit
+openai
+python-dotenv
+python-pptx
+moviepy
+Pillow
+numpy
+imageio
+imageio-ffmpeg
